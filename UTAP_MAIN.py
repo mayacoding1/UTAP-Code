@@ -50,6 +50,15 @@ LIS = 0
 global LSM
 LSM = 0
 
+global toggleUp = False
+global toggleDown = False
+
+global upManual = False
+global upManualVal = 0
+
+global downManual = False
+global downManualVal = 0 
+
 global sensor_flag
 sensor_flag = True
 
@@ -411,6 +420,7 @@ try:
                     else:
                         print("%s released" % (button))
 
+                    """
                     if button == "y":
 
                         GPIO.output(6,GPIO.HIGH)#turn on other LED
@@ -426,6 +436,22 @@ try:
                         GPIO.output(GR2,GPIO.LOW)
                         pwm.channels[GR2_PWM].duty_cycle = 0
                         GPIO.output(16,GPIO.LOW)
+                    """
+
+                    if value:
+                        if button == "x":
+                            toggleUp = True
+                            toggleDown = False
+                            
+                        elif button == "b":
+                            toggleUp = False
+                            toggleDown = True
+                            
+                        elif button == "a":
+                            toggleUp = False
+                            toggleDown = False
+
+                    
             if type & 0x02:
                 axis = axis_map[number]
                 #right joystick fwd/rev
@@ -454,6 +480,7 @@ try:
 
                     intValx = int(fvalue)*2+1
 
+                
                 #front right trigger fwd (vehicle ascend)
                 if axis=="ry":
                     fvalue = value
@@ -464,13 +491,13 @@ try:
                     fvalue = value
                     axis_states[axis] = fvalue
                     intValrx = int(fvalue)*2+1
+            
 
                 #There's a nice tutorial for single joysick control at http://home.kendra.com/mauser/Joystick.html
                 if intValy2<-100:
 
                     GPIO.output(GR1,GPIO.LOW)#direction pin
                     pwm.channels[GR1_PWM].duty_cycle = abs(intValy2)
-
 
 
                 elif intValy2>100:
@@ -496,24 +523,57 @@ try:
 
                     pwm.channels[BL1_PWM].duty_cycle = 0
 
-                if intValrx>100:
-                    GPIO.output(OR1,GPIO.LOW)#direction pin
-                    GPIO.output(BR1,GPIO.LOW)#direction pin
-
-                    pwm.channels[OR1_PWM].duty_cycle = abs(intValrx)
-                    pwm.channels[BR1_PWM].duty_cycle = abs(intValrx)
+            if intValrx>100:
+                    upManual = True
+                    downManual = False
+                    upManualVal = abs(intValrx)
+                    downManualVal = 0
 
                 elif intValry>100:
-
-                    GPIO.output(OR1,GPIO.HIGH)#direction pin
-                    GPIO.output(BR1,GPIO.HIGH)#direction pin
-
-                    pwm.channels[OR1_PWM].duty_cycle = abs(intValry)
-                    pwm.channels[BR1_PWM].duty_cycle = abs(intValry)
+                    downManual = True
+                    upManual = False
+                    downManualVal = abs(intValry)
+                    upManualVal = 0
+                    
                 else:
+                    downManual = False
+                    upManual = False
+                    downManualVal = 0
+                    upManualVal = 0
+                        
+            if toggleUp:
+                GPIO.output(OR1,GPIO.LOW)#direction pin
+                GPIO.output(GR2,GPIO.HIGH)#direction pin
 
-                    pwm.channels[OR1_PWM].duty_cycle = 0
-                    pwm.channels[BR1_PWM].duty_cycle = 0
+                pwm.channels[OR1_PWM].duty_cycle = 0xFFFF
+                pwm.channels[GR2_PWM].duty_cycle = 0xFFFF
+                
+            elif toggleDown:
+                GPIO.output(OR1,GPIO.HIGH)#direction pin
+                GPIO.output(GR2,GPIO.LOW)#direction pin
+
+                pwm.channels[OR1_PWM].duty_cycle = 0xFFFF
+                pwm.channels[GR2_PWM].duty_cycle = 0xFFFF
+                
+            elif upManual:
+                GPIO.output(OR1,GPIO.LOW)#direction pin
+                GPIO.output(GR2,GPIO.HIGH)#direction pin
+
+                pwm.channels[OR1_PWM].duty_cycle = upManualVal
+                pwm.channels[GR2_PWM].duty_cycle = upManualVal
+                
+            elif downManual:
+                GPIO.output(OR1,GPIO.HIGH)#direction pin
+                GPIO.output(GR2,GPIO.LOW)#direction pin
+
+                pwm.channels[OR1_PWM].duty_cycle = downManualVal
+                pwm.channels[GR2_PWM].duty_cycle = downManualVal
+                
+            else:
+                pwm.channels[OR1_PWM].duty_cycle = 0
+                pwm.channels[GR2_PWM].duty_cycle = 0
+            
+                
 
 except (KeyboardInterrupt,SystemExit):
     GPIO.cleanup()
