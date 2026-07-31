@@ -439,15 +439,15 @@ try:
                     """
 
                     if value:
-                        if button == "x":
+                        if button == "LB":
                             toggleUp = True
                             toggleDown = False
                             
-                        elif button == "b":
+                        elif button == "RB":
                             toggleUp = False
                             toggleDown = True
                             
-                        elif button == "a":
+                        elif button == "y":
                             toggleUp = False
                             toggleDown = False
 
