@@ -526,12 +526,16 @@ try:
             if intValrx>100:
                     upManual = True
                     downManual = False
+                    toggleUp = False
+                    toggleDown = False
                     upManualVal = abs(intValrx)
                     downManualVal = 0
 
                 elif intValry>100:
                     downManual = True
                     upManual = False
+                    toggleUp = False
+                    toggleDown = False
                     downManualVal = abs(intValry)
                     upManualVal = 0
                     
@@ -540,22 +544,9 @@ try:
                     upManual = False
                     downManualVal = 0
                     upManualVal = 0
-                        
-            if toggleUp:
-                GPIO.output(OR1,GPIO.LOW)#direction pin
-                GPIO.output(GR2,GPIO.HIGH)#direction pin
 
-                pwm.channels[OR1_PWM].duty_cycle = 0xFFFF
-                pwm.channels[GR2_PWM].duty_cycle = 0xFFFF
-                
-            elif toggleDown:
-                GPIO.output(OR1,GPIO.HIGH)#direction pin
-                GPIO.output(GR2,GPIO.LOW)#direction pin
-
-                pwm.channels[OR1_PWM].duty_cycle = 0xFFFF
-                pwm.channels[GR2_PWM].duty_cycle = 0xFFFF
-                
-            elif upManual:
+            
+            if upManual:
                 GPIO.output(OR1,GPIO.LOW)#direction pin
                 GPIO.output(GR2,GPIO.HIGH)#direction pin
 
@@ -568,6 +559,20 @@ try:
 
                 pwm.channels[OR1_PWM].duty_cycle = downManualVal
                 pwm.channels[GR2_PWM].duty_cycle = downManualVal
+                        
+            elif toggleUp:
+                GPIO.output(OR1,GPIO.LOW)#direction pin
+                GPIO.output(GR2,GPIO.HIGH)#direction pin
+
+                pwm.channels[OR1_PWM].duty_cycle = 0xFFFF
+                pwm.channels[GR2_PWM].duty_cycle = 0xFFFF
+                
+            elif toggleDown:
+                GPIO.output(OR1,GPIO.HIGH)#direction pin
+                GPIO.output(GR2,GPIO.LOW)#direction pin
+
+                pwm.channels[OR1_PWM].duty_cycle = 0xFFFF
+                pwm.channels[GR2_PWM].duty_cycle = 0xFFFF
                 
             else:
                 pwm.channels[OR1_PWM].duty_cycle = 0
