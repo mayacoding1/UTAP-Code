@@ -277,6 +277,8 @@ GPIO.setup(BR1,GPIO.OUT)#Brown 1
 #status LEDs
 GPIO.setup(6,GPIO.OUT)#
 GPIO.setup(16,GPIO.OUT)#
+GPIO.setup(22,GPIO.OUT)#
+GPIO.setup(23,GPIO.OUT)#
 
 
 # Based on code released by rdb under the Unlicense (unlicense.org)
@@ -549,6 +551,9 @@ try:
                 GPIO.output(OR1,GPIO.LOW)#direction pin
                 GPIO.output(GR2,GPIO.HIGH)#direction pin
 
+                GPIO.output(22,GPIO.HIGH)
+                GPIO.output(23,GPIO.LOW)
+
                 pwm.channels[OR1_PWM].duty_cycle = 0xFFFF
                 pwm.channels[GR2_PWM].duty_cycle = 0xFFFF
                 
@@ -556,11 +561,17 @@ try:
                 GPIO.output(OR1,GPIO.HIGH)#direction pin
                 GPIO.output(GR2,GPIO.LOW)#direction pin
 
+                GPIO.output(23,GPIO.HIGH)
+                GPIO.output(22,GPIO.LOW)
+
                 pwm.channels[OR1_PWM].duty_cycle = 0xFFFF
                 pwm.channels[GR2_PWM].duty_cycle = 0xFFFF
             else:
                 pwm.channels[OR1_PWM].duty_cycle = 0
                 pwm.channels[GR2_PWM].duty_cycle = 0
+
+                GPIO.output(22,GPIO.LOW)
+                GPIO.output(23,GPIO.HIGH)
             
                 
 
