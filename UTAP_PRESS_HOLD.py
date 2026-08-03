@@ -424,7 +424,7 @@ try:
                     else:
                         print("%s released" % (button))
                         upManual = False
-                        downManual = True
+                        downManual = False
 
                     """
                     if button == "y":
