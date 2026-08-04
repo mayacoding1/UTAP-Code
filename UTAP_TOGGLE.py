@@ -50,11 +50,15 @@ LIS = 0
 global LSM
 LSM = 0
 
-global upReleased = False
-global upOn = False
+global upReleased
+upReleased = False
+global upOn 
+upOn = False
 
-global downReleased = False
-global upOn = False
+global downReleased
+downReleased = False
+global upOn 
+upOn = False
 
 global sensor_flag
 sensor_flag = True
